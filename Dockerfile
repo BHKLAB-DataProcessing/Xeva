@@ -1,8 +1,10 @@
-FROM registry.codeocean.com/codeocean/r-base:4.0.0-ubuntu18.04
+FROM bioconductor/bioconductor_docker:devel
 
-ARG DEBIAN_FRONTEND=noninteractive
+USER root
+
+RUN apt-get update && apt-get install -y openssl libssl-dev curl libcurl4-openssl-dev libxml2-dev git tcl tk
 
 RUN Rscript -e 'remotes::install_github("bhklab/Xeva")'
-RUN Rscript -e 'options(warn=2); install.packages("BiocManager")' 
-RUN Rscript -e 'options(warn=2); BiocManager::install(c("Biobase"))'
-RUN Rscript -e 'options(warn=2); install.packages("biocompute")' 
+RUN Rscript -e 'install.packages("BiocManager")' 
+RUN Rscript -e 'BiocManager::install(c("Biobase"))'
+RUN Rscript -e 'install.packages("biocompute")' 
